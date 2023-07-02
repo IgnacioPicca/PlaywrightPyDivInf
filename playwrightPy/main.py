@@ -3,7 +3,8 @@ from playwright.sync_api import sync_playwright
 from login import login
 from newClient import create_new_client
 
-linkWeb = 'http://cuyocredito.dnsalias.com/LoanHomologacion/Web/(S(aq4w3relaztyydcdffnn3jme))/Login.aspx'
+linkWeb = "http://loanhomologacion.dash-deportes.com.ar/"
+
 
 def main():
     with sync_playwright() as p:
@@ -17,7 +18,7 @@ def main():
 
         # Create New Client
         create_new_client(page)
-        
+
         # Close browser
         browser.close()
 
