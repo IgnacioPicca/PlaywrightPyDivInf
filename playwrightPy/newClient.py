@@ -1,27 +1,37 @@
-from playwright.sync_api import sync_playwright
+from playwright.async_api import async_playwright
+import asyncio
 
 # New Client xpath
 FILTERMENU_OPERACIONES = '//a[@href="#c1"]'
 FILTERMENU_OPERACIONES_CLIENTE = '//a[@href="#c1043123"]'
 FILTERMENU_OPERACIONES_CLIENTE_CLIENTE = '//a[@href="#c6"]'
-FILTERMENU_OPERACIONES_CLIENTE_CLIENTE_ADMINISTRADOR = '//a[@href="ClienteAdministrador.aspx"]'
-BTNALTA = '//*[contains(@id, "btnAlta")]//a'
+FILTERMENU_OPERACIONES_CLIENTE_CLIENTE_ADMINISTRADOR = (
+    '//a[@href="ClienteAdministrador.aspx"]'
+)
 
 
-
-def create_new_client(page):
+async def create_new_client(page):
     # Operaciones
-    page.query_selector(FILTERMENU_OPERACIONES).click()
+    await page.click(FILTERMENU_OPERACIONES)
     # Cliente
-    page.query_selector(FILTERMENU_OPERACIONES_CLIENTE).click()
+    await page.click(FILTERMENU_OPERACIONES_CLIENTE)
     # Cliente
-    page.query_selector(FILTERMENU_OPERACIONES_CLIENTE_CLIENTE).click()
+    await page.click(FILTERMENU_OPERACIONES_CLIENTE_CLIENTE)
     # Administrador
-    page.query_selector(FILTERMENU_OPERACIONES_CLIENTE_CLIENTE_ADMINISTRADOR).click()
+    await page.click(FILTERMENU_OPERACIONES_CLIENTE_CLIENTE_ADMINISTRADOR)
     # Alta
 
-    # iframeButton = page.frame_locator('iFrame').locator(BTNALTA);
-    # iframeButton.click();
+    iframe = page.frame(name="basefrm")
+    await iframe.wait_for_load_state()
+
+    btn = await iframe.query_selector('[id="btnAlta"] a')
+    if btn:
+        await btn.click()
+    else:
+        print("No se encontró el botón en el iframe.")
+
+    # iframe_context = await iframe.frame_context()
+    # await iframe_context.click(BTNALTA)
 
     # iframe_selector = '//iframe[@src="ClienteBusqueda.aspx"]'
     # frame = page.query_selector(iframe_selector)
